@@ -11,14 +11,20 @@ CONFIG += c++17
 include ($$PWD/third_party/QJoysticks/QJoysticks.pri)
 
 SOURCES += \
+    lib/src/Controller.cpp \
+    lib/src/RemoterGuard.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
+    lib/inc/Controller.h \
+    lib/inc/RemoterGuard.h \
     mainwindow.h
 
 FORMS += \
     mainwindow.ui
+
+DEFINES += MY_DEBUG
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

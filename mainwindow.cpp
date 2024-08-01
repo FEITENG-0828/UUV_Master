@@ -1,7 +1,9 @@
-#include "mainwindow.h"
+#include "./mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent):
+#include <QDebug>
+
+MainWindow::MainWindow(QWidget* parent):
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
@@ -11,4 +13,16 @@ MainWindow::MainWindow(QWidget *parent):
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::updateJoystickData()
+{
+    qDebug()<<"updateJoystickData";
+    // TODO
+}
+
+void MainWindow::updateRobotData()
+{
+    qDebug()<<"updateRobotData";
+    // TODO
 }
