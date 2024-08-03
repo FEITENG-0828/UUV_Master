@@ -8,6 +8,13 @@ namespace FEITENG
 {
     Controller::Controller(MainWindow* main_window)
     {
+        m_joysticks_instance_ptr = QJoysticks::getInstance();
+        m_joysticks_instance_ptr->setVirtualJoystickEnabled(false);
+        m_current_joystick_ptr = nullptr;
+        m_has_inited_current_joystick = false;
+        connect(m_joysticks_instance_ptr, &QJoysticks::countChanged,
+                this, &Controller::initCurrentJoystick);
+
         qRegisterMetaType<ListeningState>();
         m_listening_state = ListeningState::UNSTARTED;
 
@@ -17,8 +24,10 @@ namespace FEITENG
         m_timer_ptr->setInterval(m_polling_period);
         connect(m_timer_ptr, &QTimer::timeout, this, &Controller::updateData);
 
-        connect(this, &Controller::joystickDataSended, main_window, &MainWindow::updateJoystickData);
-        connect(this, &Controller::robotDataSended, main_window, &MainWindow::updateRobotData);
+        connect(this, &Controller::joystickDataSended,
+                main_window, &MainWindow::updateJoystickData);
+        connect(this, &Controller::robotDataSended,
+                main_window, &MainWindow::updateRobotData);
     }
 
     Controller::~Controller()
@@ -27,9 +36,23 @@ namespace FEITENG
         m_timer_ptr = nullptr;
     }
 
-    void Controller::updateListeningState(const ListeningState& state_input)
+    void Controller::initCurrentJoystick()
     {
-        switch(state_input)
+        if(!m_has_inited_current_joystick)
+        {
+            disconnect(m_joysticks_instance_ptr, &QJoysticks::countChanged,
+                       this, &Controller::initCurrentJoystick);
+            m_has_inited_current_joystick = true;
+            if(m_joysticks_instance_ptr->joystickExists(0))
+            {
+                m_current_joystick_ptr = m_joysticks_instance_ptr->getInputDevice(0);
+            }
+        }
+    }
+
+    void Controller::updateListeningState(const ListeningState& state)
+    {
+        switch(state)
         {
             case ListeningState::UNSTARTED:
 #               ifdef MY_DEBUG
@@ -38,20 +61,26 @@ namespace FEITENG
                 break;
 
             case ListeningState::RUNNING:
-                if(!m_timer_ptr->isActive())
+                if(m_listening_state != ListeningState::TERMINATED && !m_timer_ptr->isActive())
                 {
+                    m_listening_state = state;
                     m_timer_ptr->start();
                 }
                 break;
 
             case ListeningState::PAUSED:
-                if(m_timer_ptr->isActive())
+                if(m_listening_state != ListeningState::TERMINATED)
                 {
-                    m_timer_ptr->stop();
+                    m_listening_state = state;
+                    if(m_timer_ptr->isActive())
+                    {
+                        m_timer_ptr->stop();
+                    }
                 }
                 break;
 
             case ListeningState::TERMINATED:
+                m_listening_state = state;
                 if(m_timer_ptr->isActive())
                 {
                     m_timer_ptr->stop();
@@ -63,7 +92,18 @@ namespace FEITENG
 
     void Controller::updateData()
     {
+        // if(m_current_joystick_ptr)
+        // {
+        qDebug()<<m_joysticks_instance_ptr->nonBlacklistedCount();
+        qDebug()<<m_joysticks_instance_ptr->deviceNames();
+        auto devicelist = m_joysticks_instance_ptr->inputDevices();
+        qDebug()<<devicelist;
+        for(auto iter = devicelist.begin(); iter != devicelist.end(); ++iter)
+        {
+            qDebug()<<(*iter)->id<<' '<<(*iter)->instanceID<<' '<<(*iter)->name;
+        }
         emit joystickDataSended();
+        // }
         emit robotDataSended();
     }
 } // namespace FEITENG

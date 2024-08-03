@@ -17,7 +17,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::updateJoystickData()
 {
-    qDebug()<<"updateJoystickData";
     // TODO
 }
 

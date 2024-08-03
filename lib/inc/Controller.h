@@ -5,6 +5,8 @@
 #include <QObject>
 #include <QTimer>
 
+#include "QJoysticks.h"
+
 namespace FEITENG
 {
     class Controller : public QObject
@@ -21,6 +23,10 @@ namespace FEITENG
             };
 
         private:
+            QJoysticks* m_joysticks_instance_ptr;
+            QJoystickDevice* m_current_joystick_ptr;
+            bool m_has_inited_current_joystick;
+
             ListeningState m_listening_state;
             QTimer* m_timer_ptr;
             qint16 m_polling_period;
@@ -32,6 +38,9 @@ namespace FEITENG
         signals:
             void joystickDataSended();
             void robotDataSended();
+
+        private slots:
+            void initCurrentJoystick();
 
         public slots:
             void updateListeningState(const ListeningState&);
