@@ -1,19 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>main_window</class>
+ <widget class="QMainWindow" name="main_window">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1200</width>
+    <height>900</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>UUV_Master</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="central_widget">
+   <widget class="QComboBox" name="joysticks_combo_box">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>120</y>
+      <width>300</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="maxVisibleItems">
+     <number>3</number>
+    </property>
+   </widget>
+  </widget>
  </widget>
  <resources/>
  <connections/>

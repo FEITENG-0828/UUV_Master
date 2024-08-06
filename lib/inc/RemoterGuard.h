@@ -1,7 +1,6 @@
 #ifndef ___FEITENG_REMOTERGUARD_H
 #define ___FEITENG_REMOTERGUARD_H
 
-#include "../../mainwindow.h"
 #include <QObject>
 #include <QThread>
 
@@ -17,7 +16,7 @@ namespace FEITENG
             QThread controller_thread;
 
         public:
-            RemoterGuard(MainWindow*);
+            RemoterGuard(QObject* = nullptr);
             ~RemoterGuard();
 
         signals:
