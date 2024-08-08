@@ -75,7 +75,7 @@ namespace FEITENG
             axes = current_joystick_ptr->axes;
             for(double& value : axes)
             {
-                value = qBound(0.0, value, 1.0);
+                value = qBound(-1.0, value, 1.0);
             }
             buttons = current_joystick_ptr->buttons;
             povs = current_joystick_ptr->povs;

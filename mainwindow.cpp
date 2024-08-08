@@ -28,12 +28,32 @@ void MainWindow::updateJoysticksList(const QStringList& joysticks_names,
 }
 
 void MainWindow::updateJoystickData(const QList<double>& axes,
-                                    const QList<bool>& buttons,
-                                    const QList<int>& povs)
+                                    const QList<bool>& buttons)
 {
-    qDebug()<<axes;
-    qDebug()<<buttons;
-    qDebug()<<povs;
+    if(axes.size() >= 4)
+    {
+        ui_ptr->left_x_bar->setValue((axes.at(0) + 1) * 50);
+        ui_ptr->left_y_bar->setValue((axes.at(1) + 1) * 50);
+        ui_ptr->right_x_bar->setValue((axes.at(2) + 1) * 50);
+        ui_ptr->right_y_bar->setValue((axes.at(3) + 1) * 50);
+    }
+    else
+    {
+        ui_ptr->left_x_bar->setValue(0);
+        ui_ptr->left_y_bar->setValue(0);
+        ui_ptr->right_x_bar->setValue(0);
+        ui_ptr->right_y_bar->setValue(0);
+    }
+    if(buttons.size() >= 4)
+    {
+        ui_ptr->button_1_check_box->setChecked(buttons.at(0));
+        ui_ptr->button_2_check_box->setChecked(buttons.at(1));
+    }
+    else
+    {
+        ui_ptr->button_1_check_box->setChecked(false);
+        ui_ptr->button_2_check_box->setChecked(false);
+    }
 }
 
 void MainWindow::updateRobotData()
