@@ -1,6 +1,7 @@
 #include "../inc/Controller.h"
 
 #include <QComboBox>
+#include <QtMath>
 #ifdef MY_DEBUG
 #   include <QDebug>
 #endif
@@ -30,6 +31,8 @@ namespace FEITENG
         qRegisterMetaType<QList<double>>();
         qRegisterMetaType<QList<bool>>();
         qRegisterMetaType<QList<int>>();
+        qRegisterMetaType<QList<float>>();
+        resetData();
 
         qRegisterMetaType<ListeningState>();
         m_listening_state = ListeningState::UNSTARTED;
@@ -67,24 +70,60 @@ namespace FEITENG
         return nullptr;
     }
 
+    void Controller::resetData()
+    {
+        m_joystick_axes.clear();
+        m_joystick_buttons.clear();
+        m_joystick_povs.clear();
+
+        m_robot_data = {0, 0, 0, 0, 0, 0, 0.5};
+    }
+
     void Controller::fetchJoystickData()
     {
         QJoystickDevice* current_joystick_ptr = getJoystickDevice();
         if(current_joystick_ptr)
         {
-            axes = current_joystick_ptr->axes;
-            for(double& value : axes)
+            m_joystick_axes = current_joystick_ptr->axes;
+            for(double& value : m_joystick_axes)
             {
                 value = qBound(-1.0, value, 1.0);
             }
-            buttons = current_joystick_ptr->buttons;
-            povs = current_joystick_ptr->povs;
+            m_joystick_buttons = current_joystick_ptr->buttons;
+            m_joystick_povs = current_joystick_ptr->povs;
         }
     }
 
     void Controller::transcribeData()
     {
-        // TODO
+        if(m_current_joystick_sdl_id != -1)
+        {
+            auto curve = [](const float k, const float x)
+            {
+                float ans = 0;
+                if(x >= 0)
+                {
+                    ans = k * qPow(x, 4);
+                }
+                else
+                {
+                    ans = -k * qPow(x, 4);
+                }
+                return ans;
+            };
+            m_robot_data[0] = curve(3000, m_joystick_axes.at(2));
+            m_robot_data[1] = curve(-4000, m_joystick_axes.at(1));
+            m_robot_data[2] = curve(2500, m_joystick_axes.at(3));
+            m_robot_data[5] = curve(900, m_joystick_axes.at(0));
+            if(m_joystick_buttons.at(0))
+            {
+             m_robot_data[6] = 0.45;
+            }
+            if(m_joystick_buttons.at(1))
+            {
+             m_robot_data[6] = 0.9;
+            }
+        }
     }
 
     void Controller::initCurrentJoystick()
@@ -118,9 +157,7 @@ namespace FEITENG
         }
         else
         {
-            axes.clear();
-            buttons.clear();
-            povs.clear();
+            resetData();
             if(m_joysticks_instance_ptr->count() > 0)
             {
                 m_current_joystick_device_idx = 0;
@@ -138,9 +175,6 @@ namespace FEITENG
 
     void Controller::changeJoystickByChoice()
     {
-        axes.clear();
-        buttons.clear();
-        povs.clear();
         QJoystickDevice* new_joystick_ptr =
             m_joysticks_instance_ptr->getInputDevice(
                 m_main_window_ptr
@@ -205,7 +239,7 @@ namespace FEITENG
     {
         fetchJoystickData();
         transcribeData();
-        emit joystickDataSended(axes, buttons, povs);
-        emit robotDataSended();
+        emit joystickDataSended(m_joystick_axes, m_joystick_buttons, m_joystick_povs);
+        emit robotDataSended(m_robot_data);
     }
 } // namespace FEITENG

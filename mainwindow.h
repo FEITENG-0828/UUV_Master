@@ -27,7 +27,7 @@ class MainWindow : public QMainWindow
     public slots:
         void updateJoysticksList(const QStringList&, const int);
         void updateJoystickData(const QList<double>&, const QList<bool>&);
-        void updateRobotData();
+        void updateRobotData(const QList<float>&);
 };
 
 template<typename T>

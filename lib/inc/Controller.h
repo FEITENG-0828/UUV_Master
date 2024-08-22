@@ -30,15 +30,18 @@ namespace FEITENG
             int m_current_joystick_sdl_id;
             bool m_has_inited_current_joystick;
 
-            QList<double> axes;
-            QList<bool> buttons;
-            QList<int> povs;
+            QList<double> m_joystick_axes;
+            QList<bool> m_joystick_buttons;
+            QList<int> m_joystick_povs;
+
+            QList<float> m_robot_data;
 
             ListeningState m_listening_state;
             QTimer* m_timer_ptr;
             qint16 m_polling_period;
 
             QJoystickDevice* getJoystickDevice() const;
+            void resetData();
             void fetchJoystickData();
             void transcribeData();
 
@@ -49,7 +52,7 @@ namespace FEITENG
         signals:
             void joysticksChanged(const QStringList&, const int);
             void joystickDataSended(const QList<double>&, const QList<bool>&, const QList<int>&);
-            void robotDataSended();
+            void robotDataSended(const QList<float>&);
 
         private slots:
             void initCurrentJoystick();

@@ -56,8 +56,13 @@ void MainWindow::updateJoystickData(const QList<double>& axes,
     }
 }
 
-void MainWindow::updateRobotData()
+void MainWindow::updateRobotData(const QList<float>& robot_data)
 {
-    qDebug()<<"updateRobotData";
-    // TODO
+    ui_ptr->x_label->setText("x : " + QString::number(robot_data.at(0), 'f', 2));
+    ui_ptr->y_label->setText("y : " + QString::number(robot_data.at(1), 'f', 2));
+    ui_ptr->z_label->setText("z : " + QString::number(robot_data.at(2), 'f', 2));
+    ui_ptr->roll_label->setText("roll : " + QString::number(robot_data.at(3), 'f', 2));
+    ui_ptr->pitch_label->setText("pitch : " + QString::number(robot_data.at(4), 'f', 2));
+    ui_ptr->yaw_label->setText("yaw : " + QString::number(robot_data.at(5), 'f', 2));
+    ui_ptr->servo_label->setText("servo : " + QString::number(robot_data.at(6), 'f', 6));
 }
