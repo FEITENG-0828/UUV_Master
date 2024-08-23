@@ -13,7 +13,8 @@ namespace FEITENG
             Q_OBJECT
 
         private:
-            QThread controller_thread;
+            QThread m_controller_thread;
+            QThread m_joystickdatatransmitter_thread;
 
         public:
             RemoterGuard(QObject* = nullptr);

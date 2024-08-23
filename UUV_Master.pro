@@ -1,4 +1,4 @@
-QT       += core gui
+QT += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -12,12 +12,14 @@ include ($$PWD/third_party/QJoysticks/QJoysticks.pri)
 
 SOURCES += \
     lib/src/Controller.cpp \
+    lib/src/JoystickDataTransmitter.cpp \
     lib/src/RemoterGuard.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     lib/inc/Controller.h \
+    lib/inc/JoystickDataTransmitter.h \
     lib/inc/RemoterGuard.h \
     mainwindow.h
 

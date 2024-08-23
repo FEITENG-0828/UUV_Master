@@ -51,7 +51,9 @@ namespace FEITENG
 
         signals:
             void joysticksChanged(const QStringList&, const int);
-            void joystickDataSended(const QList<double>&, const QList<bool>&, const QList<int>&);
+            void joystickDataSended(const QList<double>&,
+                                    const QList<bool>&,
+                                    const QList<int>&);
             void robotDataSended(const QList<float>&);
 
         private slots:
