@@ -1,12 +1,34 @@
 #include "../inc/JoystickDataTransmitter.h"
 
+#include <QLineEdit>
+
 namespace FEITENG
 {
     JoystickDataTransmitter::JoystickDataTransmitter(
-        [[maybe_unused]] QObject* parent_ptr) : QObject(nullptr)
+        MainWindow* main_window_ptr) : QObject(nullptr)
     {
+        m_main_window_ptr = main_window_ptr;
+
         m_host_ip = "192.168.16.102";
+        m_main_window_ptr
+            ->findChildControl<QLineEdit*>("host_ip_line_edit")
+            ->setText(m_host_ip);
+        connect(m_main_window_ptr
+                    ->findChildControl<QLineEdit*>("host_ip_line_edit"),
+                &QLineEdit::editingFinished,
+                this,
+                &JoystickDataTransmitter::changeHostIpByEdit);
+
         m_host_port = 10086;
+        m_main_window_ptr
+            ->findChildControl<QLineEdit*>("host_port_line_edit")
+            ->setText(QString::number(m_host_port));
+        connect(m_main_window_ptr
+                    ->findChildControl<QLineEdit*>("host_port_line_edit"),
+                &QLineEdit::editingFinished,
+                this,
+                &JoystickDataTransmitter::changeHostPortByEdit);
+
         m_socket_ptr = new QUdpSocket(this);
 
         qRegisterMetaType<QList<float>>();
@@ -30,5 +52,19 @@ namespace FEITENG
         m_socket_ptr->writeDatagram(robot_data_json_str.toUtf8(),
                                     QHostAddress(m_host_ip),
                                     m_host_port);
+    }
+
+    void JoystickDataTransmitter::changeHostIpByEdit()
+    {
+        m_host_ip = m_main_window_ptr
+            ->findChildControl<QLineEdit*>("host_ip_line_edit")
+            ->text();
+    }
+
+    void JoystickDataTransmitter::changeHostPortByEdit()
+    {
+        m_host_port = m_main_window_ptr
+            ->findChildControl<QLineEdit*>("host_port_line_edit")
+            ->text().toULongLong();
     }
 } // namespace FEITENG

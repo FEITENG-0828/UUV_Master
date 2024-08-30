@@ -15,7 +15,7 @@ namespace FEITENG
         m_controller_thread.start();
 
         JoystickDataTransmitter* joystickdatatransmitter_ptr =
-                new JoystickDataTransmitter();
+                new JoystickDataTransmitter(dynamic_cast<MainWindow*>(parent_ptr));
         joystickdatatransmitter_ptr->moveToThread(&m_joystickdatatransmitter_thread);
         connect(controller_ptr, &Controller::robotDataSended,
                 joystickdatatransmitter_ptr, &JoystickDataTransmitter::transmitData);
