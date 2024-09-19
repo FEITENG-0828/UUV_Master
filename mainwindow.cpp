@@ -9,7 +9,9 @@ MainWindow::MainWindow(QWidget* parent_ptr):
 {
     ui_ptr->setupUi(this);
 
-    this->setFixedSize(540, 900);
+    this->setFixedSize(1870, 900);
+    ui_ptr->video_widget->setUrl("rtsp://admin:123456@192.168.0.123/video1");
+    ui_ptr->video_widget->open();
 }
 
 MainWindow::~MainWindow()
