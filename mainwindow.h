@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "./lib/inc/RobotData.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui
 {
@@ -21,18 +23,23 @@ class MainWindow : public QMainWindow
         MainWindow(QWidget* = nullptr);
         ~MainWindow();
 
-        template<typename T>
-            T findChildControl(const QString&);
+        template<typename TypePtr>
+            TypePtr findChildControl(const QString&);
 
     public slots:
         void updateJoysticksList(const QStringList&, const int);
-        void updateJoystickData(const QList<double>&, const QList<bool>&);
-        void updateRobotData(const QList<float>&);
+        void updateJoystickData(const QList<double>&,
+                                const QList<bool>&,
+                                const QList<int>&);
+        void updateRobotData(const FEITENG::RobotData&);
+        void updateHostIp(const QString&);
+        void updateHostPort(const quint16);
 };
 
-template<typename T>
-    T MainWindow::findChildControl(const QString& name)
+template<typename TypePtr>
+    TypePtr MainWindow::findChildControl(const QString& name)
     {
-        return this->findChild<T>(name);
+        return this->findChild<TypePtr>(name);
     }
+
 #endif // MAINWINDOW_H

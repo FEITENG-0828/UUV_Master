@@ -1,10 +1,9 @@
 #ifndef ___FEITENG_REMOTERGUARD_H
 #define ___FEITENG_REMOTERGUARD_H
 
+#include "mainwindow.h"
 #include <QObject>
 #include <QThread>
-
-#include "./Controller.h"
 
 namespace FEITENG
 {
@@ -13,16 +12,22 @@ namespace FEITENG
             Q_OBJECT
 
         private:
+            MainWindow* m_main_window_ptr;
+
             QThread m_controller_thread;
-            QThread m_joystickdatatransmitter_thread;
+            QThread m_robotdatatransmitter_thread;
 
         public:
             RemoterGuard(QObject* = nullptr);
             ~RemoterGuard();
 
         signals:
-            // 自定义参数类型名一定要写完整
-            void setControllerListeningState(const FEITENG::Controller::ListeningState&);
+            void hostIpEdited(const QString&);
+            void hostPortEdited(const quint16);
+
+        public slots:
+            void onHostIpEditingFinished();
+            void onHostPortEditingFinished();
     };
 } // namespace FEITENG
 
