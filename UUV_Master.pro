@@ -11,18 +11,24 @@ CONFIG += c++17
 include ($$PWD/third_party/QJoysticks/QJoysticks.pri)
 include ($$PWD/third_party/ffmpeg/ffmpeg.pri)
 
-SOURCES += \
-    lib/src/Controller.cpp \
-    lib/src/JoystickDataTransmitter.cpp \
-    lib/src/RemoterGuard.cpp \
-    main.cpp \
-    mainwindow.cpp
-
 HEADERS += \
     lib/inc/Controller.h \
-    lib/inc/JoystickDataTransmitter.h \
+    lib/inc/JoysticksProxy.h \
     lib/inc/RemoterGuard.h \
+    lib/inc/RobotData.h \
+    lib/inc/RobotDataFormatter.h \
+    lib/inc/RobotDataTransmitter.h \
     mainwindow.h
+
+SOURCES += \
+    lib/src/Controller.cpp \
+    lib/src/JoysticksProxy.cpp \
+    lib/src/RemoterGuard.cpp \
+    lib/src/RobotData.cpp \
+    lib/src/RobotDataFormatter.cpp \
+    lib/src/RobotDataTransmitter.cpp \
+    main.cpp \
+    mainwindow.cpp
 
 FORMS += \
     mainwindow.ui

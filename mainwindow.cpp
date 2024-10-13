@@ -1,7 +1,6 @@
 #include "./mainwindow.h"
-#include "ui_mainwindow.h"
 
-#include <QDebug>
+#include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget* parent_ptr):
     QMainWindow(parent_ptr),
@@ -29,7 +28,8 @@ void MainWindow::updateJoysticksList(const QStringList& joysticks_names,
 }
 
 void MainWindow::updateJoystickData(const QList<double>& axes,
-                                    const QList<bool>& buttons)
+                                    const QList<bool>& buttons,
+                                    [[maybe_unused]] const QList<int>& povs)
 {
     if(axes.size() >= 4)
     {
@@ -45,10 +45,10 @@ void MainWindow::updateJoystickData(const QList<double>& axes,
         ui_ptr->right_x_bar->setValue(0);
         ui_ptr->right_y_bar->setValue(0);
     }
-    if(buttons.size() >= 4)
+    if(buttons.size() > 0)
     {
-        ui_ptr->button_1_check_box->setChecked(buttons.at(0));
-        ui_ptr->button_2_check_box->setChecked(buttons.at(1));
+        ui_ptr->button_1_check_box->setChecked(buttons.at(4));
+        ui_ptr->button_2_check_box->setChecked(buttons.at(5));
     }
     else
     {
@@ -57,13 +57,35 @@ void MainWindow::updateJoystickData(const QList<double>& axes,
     }
 }
 
-void MainWindow::updateRobotData(const QList<float>& robot_data)
+void MainWindow::updateRobotData(const FEITENG::RobotData& robot_data)
 {
-    ui_ptr->x_label->setText("x : " + QString::number(robot_data.at(0), 'f', 2));
-    ui_ptr->y_label->setText("y : " + QString::number(robot_data.at(1), 'f', 2));
-    ui_ptr->z_label->setText("z : " + QString::number(robot_data.at(2), 'f', 2));
-    ui_ptr->roll_label->setText("roll : " + QString::number(robot_data.at(3), 'f', 2));
-    ui_ptr->pitch_label->setText("pitch : " + QString::number(robot_data.at(4), 'f', 2));
-    ui_ptr->yaw_label->setText("yaw : " + QString::number(robot_data.at(5), 'f', 2));
-    ui_ptr->servo_label->setText("servo : " + QString::number(robot_data.at(6), 'f', 6));
+    using RobotAxis = FEITENG::RobotData::AxisType;
+
+    auto getAxisStr = [&robot_data](const RobotAxis axis_type) -> QString
+    {
+        static const QVector<QString> axis_name
+            = {"x", "y", "z", "roll", "pitch", "yaw"};
+        return QString(R"(")") +
+               axis_name.at(static_cast<quint8>(axis_type)) +
+               R"(":)" +
+               QString::number(robot_data.getAxis(axis_type), 'f', 2);
+    };
+    ui_ptr->x_label->setText(getAxisStr(RobotAxis::X));
+    ui_ptr->y_label->setText(getAxisStr(RobotAxis::Y));
+    ui_ptr->z_label->setText(getAxisStr(RobotAxis::Z));
+    ui_ptr->roll_label->setText(getAxisStr(RobotAxis::Roll));
+    ui_ptr->pitch_label->setText(getAxisStr(RobotAxis::Pitch));
+    ui_ptr->yaw_label->setText(getAxisStr(RobotAxis::Yaw));
+    ui_ptr->servo_label->setText("servo : " +
+        QString::number(robot_data.getActuators().at(0).value.as_float, 'f', 6));
+}
+
+void MainWindow::updateHostIp(const QString& new_ip)
+{
+    ui_ptr->host_ip_line_edit->setText(new_ip);
+}
+
+void MainWindow::updateHostPort(const quint16 new_port)
+{
+    ui_ptr->host_port_line_edit->setText(QString::number(new_port));
 }

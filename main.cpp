@@ -1,12 +1,13 @@
 #include "./mainwindow.h"
+
 #include <QApplication>
 
 #include "./lib/inc/RemoterGuard.h"
 
 #ifdef Q_OS_WIN
-#   ifdef main
-#      undef main
-#   endif
+#ifdef main
+#undef main
+#endif
 #endif
 
 int main(int argc, char* argv[])
