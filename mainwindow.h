@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 
-#include "./lib/inc/RobotData.h"
+#include "RobotData.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -34,6 +34,8 @@ class MainWindow : public QMainWindow
         void updateRobotData(const FEITENG::RobotData&);
         void updateHostIp(const QString&);
         void updateHostPort(const quint16);
+
+        void onVideoAddrEditingFinished();
 };
 
 template<typename TypePtr>

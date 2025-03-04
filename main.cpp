@@ -1,8 +1,8 @@
-#include "./mainwindow.h"
+#include "mainwindow.h"
 
 #include <QApplication>
 
-#include "./lib/inc/RemoterGuard.h"
+#include "RemoterGuard.h"
 
 #ifdef Q_OS_WIN
 #ifdef main
@@ -13,6 +13,7 @@
 int main(int argc, char* argv[])
 {
     QApplication a(argc, argv);
+
     MainWindow w;
 
     FEITENG::RemoterGuard remoter_guard(&w);

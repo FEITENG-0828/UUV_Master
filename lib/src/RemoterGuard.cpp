@@ -1,11 +1,11 @@
-#include "../inc/RemoterGuard.h"
+#include "RemoterGuard.h"
 
 #include <QComboBox>
 #include <QLineEdit>
 
-#include "../inc/JoysticksProxy.h"
-#include "../inc/Controller.h"
-#include "../inc/RobotDataTransmitter.h"
+#include "JoysticksProxy.h"
+#include "Controller.h"
+#include "RobotDataTransmitter.h"
 
 namespace FEITENG
 {

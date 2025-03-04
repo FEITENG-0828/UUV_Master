@@ -1,4 +1,4 @@
-#include "./mainwindow.h"
+#include "mainwindow.h"
 
 #include "ui_mainwindow.h"
 
@@ -8,8 +8,17 @@ MainWindow::MainWindow(QWidget* parent_ptr):
 {
     ui_ptr->setupUi(this);
 
-    ui_ptr->video_widget->setUrl("rtsp://admin:123456@192.168.0.123/video1");
-    ui_ptr->video_widget->open();
+    connect(ui_ptr->play_button, &QPushButton::clicked,
+            ui_ptr->video_widget, &FEITENG::VideoWidget::play);
+    connect(ui_ptr->pause_button, &QPushButton::clicked,
+            ui_ptr->video_widget, &FEITENG::VideoWidget::pause);
+    connect(ui_ptr->refresh_button, &QPushButton::clicked,
+            ui_ptr->video_widget, &FEITENG::VideoWidget::refresh);
+    connect(ui_ptr->video_addr_line_edit, &QLineEdit::editingFinished,
+            this, &MainWindow::onVideoAddrEditingFinished);
+
+    ui_ptr->video_addr_line_edit->setText("192.168.31.45:20000");
+    emit ui_ptr->video_addr_line_edit->editingFinished();
 }
 
 MainWindow::~MainWindow()
@@ -88,4 +97,10 @@ void MainWindow::updateHostIp(const QString& new_ip)
 void MainWindow::updateHostPort(const quint16 new_port)
 {
     ui_ptr->host_port_line_edit->setText(QString::number(new_port));
+}
+
+void MainWindow::onVideoAddrEditingFinished()
+{
+    ui_ptr->video_widget->setUrl(ui_ptr->video_addr_line_edit->text());
+    ui_ptr->video_addr_line_edit->clearFocus();
 }

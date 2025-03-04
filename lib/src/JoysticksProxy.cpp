@@ -1,4 +1,4 @@
-#include "../inc/JoysticksProxy.h"
+#include "JoysticksProxy.h"
 
 #include <QTimer>
 

@@ -1,4 +1,4 @@
-#include "../inc/RobotDataFormatter.h"
+#include "RobotDataFormatter.h"
 
 #ifdef MY_DEBUG
 #include <QDebug>

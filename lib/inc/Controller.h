@@ -4,8 +4,8 @@
 #include <QObject>
 #include <QTimer>
 
-#include "./JoysticksProxy.h"
-#include "./RobotData.h"
+#include "JoysticksProxy.h"
+#include "RobotData.h"
 
 namespace FEITENG
 {

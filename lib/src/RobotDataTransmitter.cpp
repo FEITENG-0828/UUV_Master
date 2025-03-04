@@ -1,8 +1,8 @@
-#include "../inc/RobotDataTransmitter.h"
+#include "RobotDataTransmitter.h"
 
 #include <QTimer>
 
-#include "../inc/RobotDataFormatter.h"
+#include "RobotDataFormatter.h"
 
 namespace FEITENG
 {

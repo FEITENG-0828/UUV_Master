@@ -1,4 +1,4 @@
-#include "../inc/RobotData.h"
+#include "RobotData.h"
 
 #include <QtMath>
 

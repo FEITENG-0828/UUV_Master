@@ -1,11 +1,10 @@
 #ifndef ___FEITENG_ROBOTDATATRANSMITTER_H
 #define ___FEITENG_ROBOTDATATRANSMITTER_H
 
-// #include "../../mainwindow.h"
 #include <QObject>
 #include <QUdpSocket>
 
-#include "./RobotData.h"
+#include "RobotData.h"
 
 namespace FEITENG
 {

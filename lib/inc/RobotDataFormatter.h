@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QSharedPointer>
 
-#include "./RobotData.h"
+#include "RobotData.h"
 
 namespace FEITENG
 {

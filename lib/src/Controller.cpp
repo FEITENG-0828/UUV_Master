@@ -1,4 +1,4 @@
-#include "../inc/Controller.h"
+#include "Controller.h"
 
 namespace FEITENG
 {
