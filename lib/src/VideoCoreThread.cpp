@@ -2,9 +2,13 @@
 
 #include <QtEndian>
 
+#include "Constants.h"
+
 #ifdef MY_DEBUG
 #include <QDebug>
 #endif
+
+#define VIDEO_PIPE_NAME TEXT(R"(\\.\pipe\video_pipe)")
 
 namespace FEITENG
 {
@@ -32,7 +36,7 @@ namespace FEITENG
 
         m_rtc_client_ptr = new QProcess();
         m_rtc_client_ptr->setWorkingDirectory("./");
-        m_rtc_client_ptr->setProgram("./rtc_client/rtc_client.exe");
+        m_rtc_client_ptr->setProgram(Constants::RTCCLIENT_EXE_PATH);
         m_rtc_client_ptr->setArguments(m_arguments);
         m_rtc_client_ptr->start();
         if(!m_rtc_client_ptr->waitForStarted())
@@ -50,19 +54,19 @@ namespace FEITENG
 #endif
         }
 
-        if(!WaitNamedPipe(TEXT(R"(\\.\pipe\video_pipe)"), NMPWAIT_WAIT_FOREVER))
+        if(!WaitNamedPipe(VIDEO_PIPE_NAME, NMPWAIT_WAIT_FOREVER))
         {
 #ifdef MY_DEBUG
             qDebug() << "Failed to wait pipe. Error: " << GetLastError();
 #endif
         }
-        m_pipe_handle = CreateFile(TEXT(R"(\\.\pipe\video_pipe)"), // pipe name
-            GENERIC_READ,                                          // read and write access
-            0,                                                     // no sharing
-            NULL,                                                  // default security attributes
-            OPEN_EXISTING,                                         // opens existing pipe
-            0,                                                     // default attributes
-            NULL);                                                 // no template file
+        m_pipe_handle = CreateFile(VIDEO_PIPE_NAME, // pipe name
+            GENERIC_READ,                           // read and write access
+            0,                                      // no sharing
+            NULL,                                   // default security attributes
+            OPEN_EXISTING,                          // opens existing pipe
+            0,                                      // default attributes
+            NULL);                                  // no template file
         if(m_pipe_handle == INVALID_HANDLE_VALUE)
         {
 #ifdef MY_DEBUG
@@ -79,7 +83,7 @@ namespace FEITENG
         }
         locker.unlock();
 
-        m_read_timer->start(8);
+        m_read_timer->start(Constants::VIDEOFRAME_READ_INTERVAL);
     }
 
     void VideoCoreThread::disconnectServer()
@@ -185,9 +189,9 @@ namespace FEITENG
         int index = address.lastIndexOf(':');
         QString ip = (index == -1) ?
             address : (index == 0) ?
-                "127.0.0.1" : address.left(index);
+                Constants::FALLBACK_VIDEO_REMOTE_IP : address.left(index);
         QString port = (index >= 0 && index < address.size() - 1) ?
-            address.mid(index + 1) : "20000";
+            address.mid(index + 1) : QString::number(Constants::FALLBACK_VIDEO_REMOTE_PORT);
 
         m_arguments = QStringList({"-s", ip, "-p", port});
         restart();

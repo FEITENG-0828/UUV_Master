@@ -16,7 +16,7 @@ namespace FEITENG
             RobotDataFormatter(QObject* = nullptr);
             virtual ~RobotDataFormatter();
 
-            virtual QByteArray serializeData(const RobotData&) const = 0;
+            virtual QByteArray serializeData(const RobotData&) const;
     };
 
     class JsonFormatter : public RobotDataFormatter

@@ -7,6 +7,8 @@ include ($$PWD/third_party/QJoysticks/QJoysticks.pri)
 INCLUDEPATH += lib/inc
 
 HEADERS += \
+    lib/inc/ConfigManager.h \
+    lib/inc/Constants.h \
     lib/inc/Controller.h \
     lib/inc/JoysticksProxy.h \
     lib/inc/RemoterGuard.h \
@@ -18,6 +20,8 @@ HEADERS += \
     mainwindow.h
 
 SOURCES += \
+    lib/src/ConfigManager.cpp \
+    lib/src/Constants.cpp \
     lib/src/Controller.cpp \
     lib/src/JoysticksProxy.cpp \
     lib/src/RemoterGuard.cpp \

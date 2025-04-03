@@ -1,5 +1,7 @@
 #include "Controller.h"
 
+#include "Constants.h"
+
 namespace FEITENG
 {
     Controller::Controller(QObject* parent_ptr): QObject(parent_ptr)
@@ -10,7 +12,7 @@ namespace FEITENG
 
         qRegisterMetaType<RobotData>();
 
-        m_polling_period = 50;
+        m_polling_period = Constants::CONTROLLER_POLLING_PERIOD;
         m_timer_ptr = new QTimer(this);
         m_timer_ptr->setInterval(m_polling_period);
 

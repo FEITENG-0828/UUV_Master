@@ -1,7 +1,10 @@
 #include "RobotDataTransmitter.h"
 
 #include <QTimer>
+#include <QSharedPointer>
 
+#include "ConfigManager.h"
+#include "Constants.h"
 #include "RobotDataFormatter.h"
 
 namespace FEITENG
@@ -26,22 +29,32 @@ namespace FEITENG
         {
             m_be_inited = true;
 
-            setHostIp("192.168.11.254");
-            setHostPort(8888);
+            QSharedPointer<ConfigManager> settings_ptr = ConfigManager::getInstance();
+            setHostIp(settings_ptr->getValue("robot_data_transmitter/remote_ip").toString());
+            setHostPort(settings_ptr->getValue("robot_data_transmitter/remote_port").toUInt());
         }
     }
 
     void RobotDataTransmitter::transmitData(const RobotData& robot_data) const
     {
+        // static QSharedPointer<RobotDataFormatter> formatter_ptr =
+        //     RobotDataFormatterFactory::createFormatter(
+        //         Constants::ROBOTDATA_FORMAT_TYPE,
+        //         const_cast<RobotDataTransmitter*>(this));
+        // FIXME: pure virtual method called
         if(m_be_inited)
         {
             QSharedPointer<RobotDataFormatter> formatter_ptr =
                 RobotDataFormatterFactory::createFormatter(
-                    RobotDataFormatterFactory::FormatType::Usart,
+                    Constants::ROBOTDATA_FORMAT_TYPE,
                     const_cast<RobotDataTransmitter*>(this));
-            m_socket_ptr->writeDatagram(formatter_ptr->serializeData(robot_data),
-                                        QHostAddress(m_host_ip),
-                                        m_host_port);
+            QByteArray datagram = formatter_ptr->serializeData(robot_data);
+            if(!datagram.isEmpty())
+            {
+                m_socket_ptr->writeDatagram(datagram,
+                                            QHostAddress(m_host_ip),
+                                            m_host_port);
+            }
         }
     }
 

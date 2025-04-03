@@ -1,6 +1,9 @@
 #include "mainwindow.h"
 
 #include "ui_mainwindow.h"
+#include <QSharedPointer>
+
+#include "ConfigManager.h"
 
 MainWindow::MainWindow(QWidget* parent_ptr):
     QMainWindow(parent_ptr),
@@ -17,7 +20,10 @@ MainWindow::MainWindow(QWidget* parent_ptr):
     connect(ui_ptr->video_addr_line_edit, &QLineEdit::editingFinished,
             this, &MainWindow::onVideoAddrEditingFinished);
 
-    ui_ptr->video_addr_line_edit->setText("192.168.31.45:20000");
+    QSharedPointer<FEITENG::ConfigManager> settings_ptr = FEITENG::ConfigManager::getInstance();
+    ui_ptr->video_addr_line_edit->setText(
+        settings_ptr->getValue("video/remote_ip").toString() + ':' +
+        settings_ptr->getValue("video/remote_port").toString());
     emit ui_ptr->video_addr_line_edit->editingFinished();
 }
 

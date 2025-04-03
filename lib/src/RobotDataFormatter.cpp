@@ -12,6 +12,12 @@ namespace FEITENG
     RobotDataFormatter::~RobotDataFormatter()
     { }
 
+    QByteArray RobotDataFormatter::serializeData(
+        [[maybe_unused]] const RobotData& robot_data) const
+    {
+        return QByteArray();
+    }
+
     JsonFormatter::JsonFormatter(QObject* parent_ptr): RobotDataFormatter(parent_ptr)
     { }
 
