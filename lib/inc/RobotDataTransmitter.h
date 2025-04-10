@@ -13,27 +13,18 @@ namespace FEITENG
             Q_OBJECT
 
         private:
-            bool m_be_inited;
-
-            QString m_host_ip;
-            quint16 m_host_port;
+            QString m_remote_ip;
+            quint16 m_remote_port;
             QUdpSocket* m_socket_ptr;
 
         public:
-            RobotDataTransmitter(QObject* = nullptr);
+            explicit RobotDataTransmitter(QObject* = nullptr);
             ~RobotDataTransmitter();
-
-        signals:
-            void hostIpChanged(const QString&);
-            void hostPortChanged(const quint16);
-
-        private slots:
-            void init();
 
         public slots:
             void transmitData(const RobotData&) const;
-            void setHostIp(const QString&);
-            void setHostPort(const quint16);
+            void setRemoteIp(const QString&);
+            void setRemotePort(const quint16);
     };
 } // namespace FEITENG
 

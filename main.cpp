@@ -12,12 +12,13 @@
 
 int main(int argc, char* argv[])
 {
-    QApplication a(argc, argv);
+    QApplication app(argc, argv);
 
-    MainWindow w;
+    MainWindow main_window;
 
-    FEITENG::RemoterGuard remoter_guard(&w);
+    FEITENG::RemoterGuard* remoter_guard = new FEITENG::RemoterGuard(&main_window);
+    main_window.setRemoterGuard(remoter_guard);
 
-    w.show();
-    return a.exec();
+    main_window.show();
+    return app.exec();
 }

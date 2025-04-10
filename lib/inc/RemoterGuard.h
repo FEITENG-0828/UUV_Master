@@ -18,16 +18,12 @@ namespace FEITENG
             QThread m_robotdatatransmitter_thread;
 
         public:
-            RemoterGuard(QObject* = nullptr);
+            explicit RemoterGuard(QObject* = nullptr);
             ~RemoterGuard();
 
         signals:
-            void hostIpEdited(const QString&);
-            void hostPortEdited(const quint16);
-
-        public slots:
-            void onHostIpEditingFinished();
-            void onHostPortEditingFinished();
+            void remoteIpChanged(const QString&);
+            void remotePortChanged(const quint16);
     };
 } // namespace FEITENG
 

@@ -18,7 +18,7 @@ namespace FEITENG
         JoysticksProxy* joysticks_proxy_ptr = new JoysticksProxy(controller_ptr);
         connect(joysticks_proxy_ptr, &JoysticksProxy::devicesChanged,
                 m_main_window_ptr, &MainWindow::updateJoysticksList);
-        connect(m_main_window_ptr->findChildControl<QComboBox*>("joysticks_combo_box"),
+        connect(m_main_window_ptr->findChild<const QComboBox*>("joysticks_combo_box"),
                 &QComboBox::currentTextChanged,
                 joysticks_proxy_ptr,
                 &JoysticksProxy::adjustByChoice);
@@ -36,22 +36,10 @@ namespace FEITENG
 
         RobotDataTransmitter* robotdatatransmitter_ptr = new RobotDataTransmitter();
 
-        connect(robotdatatransmitter_ptr, &RobotDataTransmitter::hostIpChanged,
-                m_main_window_ptr, &MainWindow::updateHostIp);
-        connect(robotdatatransmitter_ptr, &RobotDataTransmitter::hostPortChanged,
-                m_main_window_ptr, &MainWindow::updateHostPort);
-        connect(m_main_window_ptr->findChildControl<QLineEdit*>("host_ip_line_edit"),
-                &QLineEdit::editingFinished,
-                this,
-                &RemoterGuard::onHostIpEditingFinished);
-        connect(this, &RemoterGuard::hostIpEdited,
-                robotdatatransmitter_ptr, &RobotDataTransmitter::setHostIp);
-        connect(m_main_window_ptr->findChildControl<QLineEdit*>("host_port_line_edit"),
-                &QLineEdit::editingFinished,
-                this,
-                &RemoterGuard::onHostPortEditingFinished);
-        connect(this, &RemoterGuard::hostPortEdited,
-                robotdatatransmitter_ptr, &RobotDataTransmitter::setHostPort);
+        connect(this, &RemoterGuard::remoteIpChanged,
+                robotdatatransmitter_ptr, &RobotDataTransmitter::setRemoteIp);
+        connect(this, &RemoterGuard::remotePortChanged,
+                robotdatatransmitter_ptr, &RobotDataTransmitter::setRemotePort);
         connect(controller_ptr, &Controller::robotDataSended,
                 robotdatatransmitter_ptr, &RobotDataTransmitter::transmitData);
 
@@ -68,19 +56,5 @@ namespace FEITENG
 
         m_robotdatatransmitter_thread.quit();
         m_robotdatatransmitter_thread.wait();
-    }
-
-    void RemoterGuard::onHostIpEditingFinished()
-    {
-        emit hostIpEdited(m_main_window_ptr
-            ->findChildControl<QLineEdit*>("host_ip_line_edit")
-            ->text());
-    }
-
-    void RemoterGuard::onHostPortEditingFinished()
-    {
-        emit hostPortEdited(m_main_window_ptr
-            ->findChildControl<QLineEdit*>("host_port_line_edit")
-            ->text().toULongLong());
     }
 } // namespace FEITENG

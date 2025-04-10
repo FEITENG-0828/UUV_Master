@@ -28,7 +28,7 @@ namespace FEITENG
             void transcribeData();
 
         public:
-            Controller(QObject* = nullptr);
+            explicit Controller(QObject* = nullptr);
             ~Controller();
 
             void setJoysticksProxy(JoysticksProxy* const);

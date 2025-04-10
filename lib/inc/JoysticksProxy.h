@@ -16,7 +16,7 @@ namespace FEITENG
             int m_current_sdl_id;
 
         public:
-            JoysticksProxy(QObject* = nullptr);
+            explicit JoysticksProxy(QObject* = nullptr);
             ~JoysticksProxy();
 
             bool fillData(QList<double>&, QList<bool>&, QList<int>&) const;

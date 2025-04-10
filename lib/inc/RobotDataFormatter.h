@@ -13,7 +13,7 @@ namespace FEITENG
             Q_OBJECT
 
         public:
-            RobotDataFormatter(QObject* = nullptr);
+            explicit RobotDataFormatter(QObject* = nullptr);
             virtual ~RobotDataFormatter();
 
             virtual QByteArray serializeData(const RobotData&) const;
@@ -24,7 +24,7 @@ namespace FEITENG
             Q_OBJECT
 
         public:
-            JsonFormatter(QObject* = nullptr);
+            explicit JsonFormatter(QObject* = nullptr);
             virtual ~JsonFormatter();
 
             virtual QByteArray serializeData(const RobotData&) const override;
@@ -35,7 +35,7 @@ namespace FEITENG
             Q_OBJECT
 
         public:
-            UsartFormatter(QObject* = nullptr);
+            explicit UsartFormatter(QObject* = nullptr);
             virtual ~UsartFormatter();
 
             virtual QByteArray serializeData(const RobotData&) const override;
@@ -46,7 +46,7 @@ namespace FEITENG
             Q_OBJECT
 
         public:
-            CanfdFormatter(QObject* = nullptr);
+            explicit CanfdFormatter(QObject* = nullptr);
             virtual ~CanfdFormatter();
 
             virtual QByteArray serializeData(const RobotData&) const override;
@@ -62,7 +62,7 @@ namespace FEITENG
                 Json = 0, Usart = 1, Canfd = 2
             };
 
-            RobotDataFormatterFactory(QObject* = nullptr);
+            explicit RobotDataFormatterFactory(QObject* = nullptr);
             ~RobotDataFormatterFactory();
 
             static QSharedPointer<RobotDataFormatter>

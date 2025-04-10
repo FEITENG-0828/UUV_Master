@@ -12,19 +12,27 @@ namespace Ui
 }
 QT_END_NAMESPACE
 
+namespace FEITENG
+{
+    class RemoterGuard;
+}
+
 class MainWindow : public QMainWindow
 {
         Q_OBJECT
 
     private:
-        Ui::main_window* ui_ptr;
+        Ui::main_window* m_ui_ptr;
+        FEITENG::RemoterGuard* m_remoter_guard_ptr;
+
+        void setupRobotRemoteAddr();
+        void setupVideo();
 
     public:
-        MainWindow(QWidget* = nullptr);
+        explicit MainWindow(QWidget* = nullptr);
         ~MainWindow();
 
-        template<typename TypePtr>
-            TypePtr findChildControl(const QString&);
+        void setRemoterGuard(FEITENG::RemoterGuard*);
 
     public slots:
         void updateJoysticksList(const QStringList&, const int);
@@ -32,16 +40,10 @@ class MainWindow : public QMainWindow
                                 const QList<bool>&,
                                 const QList<int>&);
         void updateRobotData(const FEITENG::RobotData&);
-        void updateHostIp(const QString&);
-        void updateHostPort(const quint16);
 
+        void onRobotRemoteIpEditingFinished();
+        void onRobotRemotePortEditingFinished();
         void onVideoAddrEditingFinished();
 };
-
-template<typename TypePtr>
-    TypePtr MainWindow::findChildControl(const QString& name)
-    {
-        return this->findChild<TypePtr>(name);
-    }
 
 #endif // MAINWINDOW_H
